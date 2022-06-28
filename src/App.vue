@@ -9,21 +9,8 @@
         <button class="btn btn-primary input-group-btn">Adiciona</button>        
       </div>        
       </form>
-      <div class="todo-list">
-        <div class="tile" v-for="t in todos" :key="t.id">          
-              <div class="tile-icon">                         
-                <i class="icon icon-time"></i>                
-              </div>          
-              <div class="tile-content"> 
-                <div class="tile-subtitle">{{ t.description }}</div>
-              </div>
-              <div class="tile-action">
-                <button class="btn btn-link">Concluído</button>
-                <button class="btn btn-link">
-                  <span class="text-error">Remover</span>
-                </button>                
-              </div>          
-        </div>
+      <div class="todo-list " v-if="todos.length">
+        <Todo v-for="t in todos" :key="t.id"  @toggle="toggleTodo" :todo="t"/>
       </div>
     </div>
   </div>
@@ -31,22 +18,34 @@
 </template>
 
 <script>
+import Todo from './components/Todo.vue';
+
+
+
 
 
 export default {
-  name: 'App',
-  data() {
-    return { todos: [], todo:{ checked: false}}
-  },
-  methods:{
-    addTodo (todo) {
-      todo.id = Date.now();
-      this.todos.push(todo);
-      this.todo = {checked: false}
-    }
-  }
+    name: "App",
+    data() {
+        return { todos: [], todo: { checked: false } };
+    },
+    methods: {
+        addTodo(todo) {
+            todo.id = Date.now();
+            this.todos.push(todo);
+            this.todo = { checked: false };
+        },
+        toggleTodo(todo){
+          const index = this.todos.findIndex(item => item.id === todo.id);
+          console.log(index)
+          if(index > -1){
+            this.todos[index].checked = !this.todos[index].checked;            
+          }
 
-  }
+        }
+    },
+    components: { Todo }
+}
 </script>
 
 
